@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hindi to English Translation</title>
+    <style>
+    .box {
+    max-width: 600px;          
+    min-height: 500px;         
+    background: rgba(255,255,255,0.92);
+    padding: 30px 35px;        
+    margin: 60px 0 0 60px;     
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 40px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 275px;
+            font-size: 10px;
+            cursor: pointer;
+            background-color:rgb(9, 167, 14);
+            color:white;
+        }
+        h2 {
+            text-align: center;
+        }
+        body {
+            margin: 0;
+            height: 100vh;
+            background-image: url("{{ url_for('static', filename='images/background.png') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Hindi → English Translator</h2>
+
+    <textarea id="inputText" placeholder="यहाँ हिंदी वाक्य लिखें…"></textarea>
+    <br>
+    <button onclick="translateText()">Translate</button>
+
+    <h3>English Output:</h3>
+    <p id="outputText"></p>
+</div>
+
+<script>
+function translateText() {
+    const text = document.getElementById("inputText").value;
+
+    fetch("/translate", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ text: text })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("outputText").innerText = data.english;
+    })
+    .catch(err => {
+        alert("Backend error");
+        console.error(err);
+    });
+}
+</script>
+
+</body>
+</html>
